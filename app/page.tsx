@@ -1,10 +1,23 @@
 'use cache';
 
-import { headers } from 'next/headers';
+interface TemplateClass {
+  name: string;
+}
 
-async function getSpells() {
+interface TemplateRace {
+  name: string;
+}
+
+interface Character {
+  id: string;
+  name: string;
+  template_classes: TemplateClass;
+  template_races: TemplateRace;
+}
+
+async function getCharacters() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_spells?select=*`,
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_characters?select=*,template_classes(name),template_races(name)`,
     {
       headers: {
         'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -15,23 +28,25 @@ async function getSpells() {
   );
   
   if (!response.ok) {
-    throw new Error('Failed to fetch spells');
+    throw new Error('Failed to fetch Characters');
   }
   
   const data = await response.json();
-  console.log("🚀 ~ getSpells ~ data:", data);
+  
   return data;
 }
 
 export default async function Page() {
-  const spells = await getSpells();
+  const characters = await getCharacters();
   const randomNumber = Math.random();
   return (
     <main className="p-12">
-      <h1 className="text-4xl mb-6">Spells - Random number: {randomNumber}</h1>
-      {spells.map((spell: any) => (
-        <div key={spell.id}>
-          <h2>{spell.name}</h2>
+      <h1 className="text-4xl mb-6">Characters - Random number: {randomNumber}</h1>
+      {characters.map((character: Character) => (
+        <div key={character.id}>
+          <h2>{character.name}</h2>
+          <p>Class: {character.template_classes?.name}</p>
+          <p>Race: {character.template_races?.name}</p>
         </div>
       ))}
     </main>
