@@ -16,32 +16,29 @@ interface Character {
 }
 
 async function getCharacters() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_characters?select=*,template_classes(name),template_races(name)`,
-    {
-      headers: {
-        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-        'prefer': 'count=exact'
-      },
-    }
-  );
+  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_characters?select=*,template_classes(name),template_races(name)`;
+  const headers = {
+    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+    'prefer': 'count=exact'
+  };
+
+  const response = await fetch(url, { headers });
   
   if (!response.ok) {
     throw new Error('Failed to fetch Characters');
   }
   
-  const data = await response.json();
-  
-  return data;
+  return response.json();
 }
 
 export default async function Page() {
+  // Cache the entire result of getCharacters
   const characters = await getCharacters();
-  const randomNumber = Math.random();
+  
   return (
     <main className="p-12">
-      <h1 className="text-4xl mb-6">Characters - Random number: {randomNumber}</h1>
+      <h1 className="text-4xl mb-6">Characters</h1>
       {characters.map((character: Character) => (
         <div key={character.id}>
           <h2>{character.name}</h2>
