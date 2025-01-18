@@ -1,3 +1,4 @@
+'use cache';
 
 
 interface TemplateClass {
@@ -33,13 +34,14 @@ async function getCharacters() {
 }
 
 export default async function Page() {
-  'use cache';
+  
+  const randomNumber = Math.random();
   // Cache the entire result of getCharacters
   const characters = await getCharacters();
   
   return (
     <main className="p-12">
-      <h1 className="text-4xl mb-6">Characters</h1> 
+      <h1 className="text-4xl mb-6">Characters - Random number: {randomNumber}</h1> 
       {characters.map((character: Character) => (
         <div key={character.id}>
           <h2>{character.name}</h2>
