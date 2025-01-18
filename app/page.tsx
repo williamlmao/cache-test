@@ -1,5 +1,6 @@
 'use cache';
 
+import Footer from './footer';
 import { supabase } from './lib/supabase';
 
 interface TemplateClass {
@@ -45,6 +46,7 @@ export default async function Page() {
           <p>Race: {character.template_races?.name}</p>
         </div>
       ))}
+      <Footer />
     </main>
   );
 }
