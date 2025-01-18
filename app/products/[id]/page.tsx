@@ -1,9 +1,5 @@
 import { getProduct } from "./getProduct";
 
-export async function generateStaticParams() {
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-    return [{ id: '1' }, { id: '2' }, { id: '3' }];
-  }
 
 
 
