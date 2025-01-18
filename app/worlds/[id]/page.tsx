@@ -1,4 +1,4 @@
-'use cache';
+
 import { getTemplateWorldByIdOrSlug } from "./query";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
