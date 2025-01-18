@@ -15,7 +15,8 @@ interface Character {
   template_races: TemplateRace;
 }
 
-async function getCharacters() {
+async function getCharacters(id: string) {
+
   const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_characters?select=*,template_classes(name),template_races(name)`;
   const headers = {
     'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -34,11 +35,11 @@ async function getCharacters() {
 
 export default async function Page() {
   // Cache the entire result of getCharacters
-  const characters = await getCharacters();
+  const characters = await getCharacters('1');
   
   return (
     <main className="p-12">
-      <h1 className="text-4xl mb-6">Characters</h1>
+      <h1 className="text-4xl mb-6">Characters</h1> 
       {characters.map((character: Character) => (
         <div key={character.id}>
           <h2>{character.name}</h2>
