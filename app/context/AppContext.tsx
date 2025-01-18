@@ -1,9 +1,12 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useState } from 'react';
 
 interface AppContextType {
-  // Add your context state and methods here
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -21,9 +24,18 @@ interface AppContextProviderProps {
 }
 
 export function AppContextProvider({ children }: AppContextProviderProps) {
-  // Add your context state and methods here
+  const [isLoading, setIsLoading] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
   const value = {
-    // Add your context values here
+    isLoading,
+    setIsLoading,
+    theme,
+    toggleTheme,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
