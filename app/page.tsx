@@ -1,5 +1,3 @@
-
-
 interface TemplateClass {
   name: string;
 }
@@ -23,7 +21,14 @@ async function getCharacters() {
     'prefer': 'count=exact'
   };
 
-  const response = await fetch(url, { headers });
+  const response = await fetch(url, { 
+    headers,
+    // Cache the response for 1 hour (3600 seconds)
+    next: { 
+      revalidate: 3600,
+      tags: ['characters']
+    }
+  });
   
   if (!response.ok) {
     throw new Error('Failed to fetch Characters');
@@ -33,7 +38,7 @@ async function getCharacters() {
 }
 
 export default async function Page() {
-  'use cache';
+  
   // Cache the entire result of getCharacters
   const characters = await getCharacters();
   
