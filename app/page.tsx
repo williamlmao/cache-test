@@ -16,7 +16,7 @@ interface Character {
 }
 
 async function getCharacters(id: string) {
-
+  console.log("id", id)
   const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_characters?select=*,template_classes(name),template_races(name)`;
   const headers = {
     'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
