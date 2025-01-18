@@ -6,7 +6,7 @@ export async function getTemplateWorldByIdOrSlug({
     profileId?: string;
   }) {
     'use cache';
-
+    const randomNumber = Math.random();
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -39,6 +39,6 @@ export async function getTemplateWorldByIdOrSlug({
     }
 
     const data = await response.json();
-    return data[0]; // Return first item since we're expecting a single result
+    return { world: data[0], randomNumber }; // Return first item since we're expecting a single result
   }
   
