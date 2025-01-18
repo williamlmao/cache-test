@@ -1,5 +1,6 @@
 'use cache';
 
+import { supabase } from './lib/supabase';
 
 interface TemplateClass {
   name: string;
@@ -17,25 +18,20 @@ interface Character {
 }
 
 async function getCharacters() {
-  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_characters?select=*,template_classes(name),template_races(name)`;
-  const headers = {
-    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-    'prefer': 'count=exact'
-  };
+  const { data, error } = await supabase
+    .from('template_characters')
+    .select('*, template_classes(name), template_races(name)');
 
-  const response = await fetch(url, { headers });
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch Characters');
+  if (error) {
+    throw error;
   }
-  
-  return response.json();
+
+  return data;
 }
 
 export default async function Page() {
-  
   const randomNumber = Math.random();
+  
   // Cache the entire result of getCharacters
   const characters = await getCharacters();
   
