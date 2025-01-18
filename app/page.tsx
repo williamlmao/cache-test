@@ -15,9 +15,7 @@ interface Character {
   template_races: TemplateRace;
 }
 
-async function getCharacters(id: string) {
-  'use cache';
-  console.log("id", id)
+async function getCharacters() {
   const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/template_characters?select=*,template_classes(name),template_races(name)`;
   const headers = {
     'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -35,8 +33,9 @@ async function getCharacters(id: string) {
 }
 
 export default async function Page() {
+  'use cache';
   // Cache the entire result of getCharacters
-  const characters = await getCharacters('1');
+  const characters = await getCharacters();
   
   return (
     <main className="p-12">
